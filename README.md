@@ -25,7 +25,51 @@ GoRoutineが終了するときの種類
 
 Contextは生存期間が不明なGoroutineを親と正しく結びつけて必要な時にキャンセルできるようにシグナルを伝えることを想定したPackage
 
+## Structure
 
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Proxy
+    participant Server
+
+    opt success
+      Client->>Proxy: Context, Task
+      activate Proxy
+      Proxy-->>Server: Context, Request
+      activate Server
+      Server-->>Proxy: Responce
+      deactivate Server
+      Proxy-->>Client: Responce
+      deactivate Proxy
+    end
+
+    opt cancel by client
+      Client->>Proxy: Context, Task
+      activate Proxy
+      Proxy-->>Server: Context, Request
+      activate Server
+      Client->>Proxy: Cancel
+      Proxy->>Server: Cancel
+      Server->>Proxy: error
+      deactivate Server
+      Proxy-->>Client: error
+      deactivate Proxy
+    end
+
+    opt timeout by proxy
+      Client->>Proxy: Context, Task
+      activate Proxy
+      Proxy-->>Server: Context, Request
+      activate Server
+      Proxy->>Server: Timeout
+      Server->>Proxy: error
+      deactivate Server
+      Proxy-->>Client: error
+      deactivate Proxy
+    end
+```
+![structure image](https://github.com/uzuna/go-context-learning/blob/docs/mermaid/img/mermaid-diagram.svg)
 
 ## Test script results
 
