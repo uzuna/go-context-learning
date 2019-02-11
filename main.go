@@ -75,8 +75,8 @@ func main() {
 	}
 	wg.Wait()
 
-	// Hevy Loop Process
-	log.Println("-- Hevy Process Simulation --")
+	// Heavy Loop Process
+	log.Println("-- Heavy Process Simulation --")
 
 	simProcess := &ProcessSimulation{Name: "l:1ms", Tick: time.Millisecond}
 	fastProxy := &ProxyProcessWithTimeout{Name: "FastProxy", Server: simProcess, Timeout: time.Millisecond * 45}
@@ -212,7 +212,7 @@ func (p *ProcessSimulation) Call(ctx context.Context, task Task) (Responce, erro
 		return Responce(""), errors.Errorf("Task.Value must int type and 1 or more")
 	}
 
-	// Hevy loop process
+	// Heavy loop process
 	var counter int
 	timeout := time.After(task.Timeout)
 	for {
